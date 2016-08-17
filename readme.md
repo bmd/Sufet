@@ -1,0 +1,1 @@
+It's a content negotiation library that you can use on its own. It's also a PSR-7 middleware!

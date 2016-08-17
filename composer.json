@@ -1,0 +1,28 @@
+{
+  "name": "bmd/sufet",
+  "description": "It's a content negotiation library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Brendan Maione-Downing",
+      "email": "b.maionedowning@gmail.com"
+    }
+  ],
+  "require": {
+    "psr/http-message": "1.*"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "4.*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Sufet\\": "src/"
+    }
+  },
+  "config": {
+    "secure-http": false,
+    "vendor-dir": "vendor"
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
+}
