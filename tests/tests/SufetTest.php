@@ -12,16 +12,16 @@ class SufetTest extends PHPUnit_Framework_TestCase
     public function testSufetCreatesNegotiators()
     {
         $mediaNegotiator = Sufet::makeNegotiator('accept', 'application/json');
-        $this->assertInstanceOf('Sufet\Negotiators\Media', $mediaNegotiator);
+        $this->assertInstanceOf('Sufet\Negotiators\AcceptNegotiator', $mediaNegotiator);
 
         $charsetNegotiator = Sufet::makeNegotiator('accept-charset', 'utf-8');
-        $this->assertInstanceOf('Sufet\Negotiators\Charset', $charsetNegotiator);
+        $this->assertInstanceOf('Sufet\Negotiators\AcceptCharsetNegotiator', $charsetNegotiator);
 
         $encodingNegotiator = Sufet::makeNegotiator('accept-encoding', 'gzip');
-        $this->assertInstanceOf('Sufet\Negotiators\Encoding', $encodingNegotiator);
+        $this->assertInstanceOf('Sufet\Negotiators\AcceptEncodingNegotiator', $encodingNegotiator);
 
         $languageNegotiator = Sufet::makeNegotiator('accept-language', 'en-us');
-        $this->assertInstanceOf('Sufet\Negotiators\Language', $languageNegotiator);
+        $this->assertInstanceOf('Sufet\Negotiators\AcceptLanguageNegotiator', $languageNegotiator);
     }
 
     public function testInvalidHeaderRaisesException()

@@ -2,13 +2,13 @@
 namespace Sufet\Negotiators;
 
 /**
- * Class Media
+ * Class AcceptNegotiator
  * @package Sufet\Negotiators
  */
-class Media extends AbstractNegotiator
+class AcceptNegotiator extends AbstractNegotiator
 {
     /**
-     * Media constructor.
+     * AcceptNegotiator constructor.
      */
     public function __construct($mediaType)
     {

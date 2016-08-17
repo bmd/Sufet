@@ -60,7 +60,7 @@ class NegotiatorMiddleware
             $this->attributeName,
             Sufet::makeNegotiator($this->headerName, $request->getHeader($this->headerName))
         );
-        
+
         return $next($request, $response);
     }
 }
