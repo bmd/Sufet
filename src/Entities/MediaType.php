@@ -13,8 +13,22 @@ class MediaType extends AccessibleEntity
     /**
      * MediaType constructor.
      */
-    public function __construct()
+    public function __construct($mediaTypeString)
     {
+        $this->parseMediaType($mediaTypeString);
+    }
+
+    /**
+     * @param  string $rawMediaString
+     * @return void
+     */
+    protected function parseMediaType($rawMediaString)
+    {
+        $split = explode('?', $rawMediaString);
+        $rawType = trim($split[0]);
+        $this->paramData = (isset($split[1]))
+            ? new ParameterGroup($split[1])
+            : [];
     }
 
     public function q()

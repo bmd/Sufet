@@ -31,8 +31,6 @@ class Sufet
      */
     public static function makeNegotiator($headerName, $headerContent)
     {
-        // make classname from header
-        //   e.g. 'accept-charset' => AcceptCharsetNegotiator
         $kls = "\\Sufet\\Negotiators\\" . str_replace('-', '', ucwords(strtolower($headerName), '-')) . "Negotiator";
 
         if (!class_exists($kls)) {
