@@ -1,14 +1,22 @@
 <?php
-namespace Sufet\Entities;
+namespace Sufet\Parsers;
+
+use Sufet\Entities\AccessibleEntity;
 
 /**
- * Class MediaType
+ * Class MediaTypeParser
  * @package Sufet\Entities
  */
-class MediaType extends AccessibleEntity
+class AcceptParser extends AccessibleEntity implements ParserInterface
 {
-
+    /** @var  */
     protected $paramData;
+
+    public function parseHeader($header)
+    {
+        // TODO: Implement parseHeader() method.
+    }
+
 
     /**
      * MediaType constructor.
