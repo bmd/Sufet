@@ -1,5 +1,17 @@
 <?php
+/**
+ * Sufet is a content-negotiation library and PSR-7 compliant middleware.
+ *
+ * @category   Sufet
+ * @package    Negotiators
+ * @author     Brendan Maione-Downing <author@example.com>
+ * @copyright  2016
+ * @license    MIT
+ * @link       https://github.com/bmd/Sufet
+ */
+
 namespace Sufet\Negotiators;
+
 use Sufet\Entities\ContentType;
 use Sufet\Entities\ContentTypeCollection;
 
@@ -9,6 +21,11 @@ use Sufet\Entities\ContentTypeCollection;
  */
 class AcceptCharsetNegotiator extends AbstractNegotiator
 {
+    protected function sortTypes(ContentType $a, ContentType $b)
+    {
+        // TODO: Implement sortTypes() method.
+    }
+
     /**
      * AcceptCharsetNegotiator constructor.
      *

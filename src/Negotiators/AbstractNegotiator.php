@@ -1,5 +1,17 @@
 <?php
+/**
+ * Sufet is a content-negotiation library and PSR-7 compliant middleware.
+ *
+ * @category   Sufet
+ * @package    Negotiators
+ * @author     Brendan Maione-Downing <author@example.com>
+ * @copyright  2016
+ * @license    MIT
+ * @link       https://github.com/bmd/Sufet
+ */
+
 namespace Sufet\Negotiators;
+
 use Sufet\Entities\ContentType;
 
 /**
