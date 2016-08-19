@@ -18,7 +18,6 @@ namespace Sufet;
  */
 class Sufet
 {
-
     /**
      * Use the name of the header being negotiated to instantiate a negotiator
      * object. Sufet uses a name-mapping convention to map the header's name to
