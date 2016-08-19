@@ -23,18 +23,18 @@ class ParameterGroup extends AccessibleEntity
      * assign those into an array to be accessed from the
      * ParameterGroup object.
      *
-     * @param  string $params
+     * @param  array $params
      * @return array
      */
-    protected function parseParameters($params)
+    protected function parseParameters(array $params)
     {
         if (!$params) {
             return [];
         }
 
         $holder = [];
-        foreach (explode(';', $params) as $param) {
-            $components = explode('=', $param);
+        foreach ($params as $param) {
+            $components = preg_split('/=/', $param);
             $holder[trim($components[0])] = trim($components[1]);
         }
 

@@ -15,6 +15,12 @@ class AcceptNegotiator extends AbstractNegotiator
 
     }
 
+    protected function parseHeader($headerContent)
+    {
+        // TODO: Implement parseHeader() method.
+    }
+
+
     public function wants($type)
     {
         return array_flip($this->mediaTypes)[0]->type === $type;

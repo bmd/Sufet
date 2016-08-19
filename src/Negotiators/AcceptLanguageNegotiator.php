@@ -14,6 +14,12 @@ class AcceptLanguageNegotiator extends AbstractNegotiator
     {
     }
 
+    protected function parseHeader($headerContent)
+    {
+        // TODO: Implement parseHeader() method.
+    }
+
+
     public function wants($type)
     {
         // TODO: Implement wants() method.
