@@ -45,3 +45,47 @@ class_alias("\\My\\Domain\\XCustomHeaderNegotiator", "\\Sufet\\Negotiators\\XCus
 \Sufet\Sufet::makeNegotiator('x-custom-header', 'abc123');
 
 ```
+
+### Using Sufet with Laravel
+
+*Warning: Untested code ahead*
+
+Laravel's middleware doesn't work quite the same as a PSR-7 middleware, but you can still use Sufet for content negotiation in Laravel.
+
+First, make the middleware class using Artisan:
+
+```sh
+php artisan make:middleware ContentNegotiationMiddleware
+```
+
+Then create a negotiator using the value of the header:
+
+```php
+<?php
+
+namespace App\Http\Middleware;
+
+use Closure;
+
+class AgeMiddleware
+{
+    /**
+     * Register the negotiator on the request object.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Closure  $next
+     * @return mixed
+     */
+    public function handle($request, Closure $next)
+    {
+        // if accept header is not provided, we can 
+        $acceptHeader = $request->header('accept', '*/*');
+        
+        // ??? does this work? I doubt this works...
+        $request->negotiator = \Sufet\Sufet::makeNegotiator('accept', $acceptHeader);
+
+        return $next($request);
+    }
+
+}
+```
