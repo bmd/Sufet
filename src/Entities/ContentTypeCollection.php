@@ -19,7 +19,12 @@ namespace Sufet\Entities;
 class ContentTypeCollection implements \ArrayAccess
 {
 
-    /** @var array */
+    /**
+     * The collection of ContentType objects made available to the negotiator
+     * class.
+     *
+     * @var array
+     */
     public $types = [];
 
     /**
@@ -36,8 +41,8 @@ class ContentTypeCollection implements \ArrayAccess
     }
 
     /**
-     * Return the names of all content types that are considered
-     * acceptable by the client.
+     * Return the names of all content types that are considered acceptable by
+     * the client.
      *
      * @return array
      */

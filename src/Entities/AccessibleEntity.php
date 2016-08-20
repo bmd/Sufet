@@ -19,8 +19,8 @@ namespace Sufet\Entities;
 abstract class AccessibleEntity implements \ArrayAccess
 {
     /**
-     * Data container for implementing magic get/set methods
-     * as well as the array access methods on Sufet objects.
+     * Data container for implementing magic get/set methods as well as the
+     * array access methods on Sufet objects.
      *
      * @var array
      */

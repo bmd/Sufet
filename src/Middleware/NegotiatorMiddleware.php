@@ -23,14 +23,16 @@ use Sufet\Sufet;
 class NegotiatorMiddleware
 {
     /**
-     * The name of the parameter to set the negotiator as on the request object.
+     * The name of the parameter to set the negotiator as on the request
+     * object.
      *
      * Once the negotiator is set, subsequent middlewares or controllers can
      * access the \Sufet\Negotiator instance on the request as
-     * `$request->$attributeName`. If an override is not provided in the constructor,
-     * the attribute name will be inferred from the name of the header being
-     * negotiated. This should generally be preferred except in the case where
-     * there is the potential for a usage to conflict with another middleware.
+     * `$request->$attributeName`. If an override is not provided in the
+     * constructor, the attribute name will be inferred from the name of the
+     * header being negotiated. This should generally be preferred except in
+     * the case where there is the potential for a usage to conflict with
+     * another middleware.
      *
      * @var string
      */
@@ -58,7 +60,7 @@ class NegotiatorMiddleware
     }
 
     /**
-     * Magic __invoke() method to improve middleware behavior.
+     * Magic __invoke() method to drive middleware behavior.
      *
      * @param  \Psr\Http\Message\ServerRequestInterface $request
      * @param  \Psr\Http\Message\ResponseInterface      $response

@@ -18,21 +18,32 @@ namespace Sufet\Entities;
  */
 class ContentType
 {
+    /**
+     * The base type of the content type entity. If the content type does not
+     * have a subtype, then this will contain the complete type and the
+     * subtype will be null.
+     *
+     * @var string
+     */
     protected $baseType;
 
+    /**
+     * The content subtype, if available. If there is no subtype specification,
+     * e.g. for the 'accept-encoding' header, then the subtype will be null.
+     *
+     * @var string|null
+     */
     protected $subType;
 
     /**
-     * The parameter group object attached to any content type
-     * object.
+     * The parameter group object attached to any content type object.
      *
      * @var ParameterGroup
      */
     protected $parameters;
 
     /**
-     * The raw content type string, without the query paramters
-     * appended to it.
+     * The raw content type string, without the query paramters appended to it.
      *
      * @var string
      */
@@ -61,21 +72,11 @@ class ContentType
     }
 
     /**
-     * Expose the parameters object to the calling class or method.
-     *
-     * @return \Sufet\Entities\ParameterGroup
-     */
-    public function params()
-    {
-        return $this->parameters;
-    }
-
-    /**
      * Get the base content type.
      *
-     * For types with subtypes, such as 'application/json', this will
-     * return the first segment, 'application'. For content types without
-     * subtypes, e.g. charset, this will return the entire type.
+     * For types with subtypes, such as 'application/json', this will return
+     * the first segment, 'application'. For content types without subtypes,
+     * e.g. charset, this will return the entire type.
      *
      * @param  mixed $default (optional)
      * @return string
@@ -86,11 +87,11 @@ class ContentType
     }
 
     /**
-     * Get the content subtype, when available, or fall back to
-     * a default value.
+     * Get the content subtype, when available, or fall back to a default
+     * value.
      *
-     * For content types that don't allow a subtype, the value of
-     * $default will be returned.
+     * For content types that don't allow a subtype, the value of $default
+     * will be returned.
      *
      * @param  mixed $default
      * @return string
@@ -101,11 +102,21 @@ class ContentType
     }
 
     /**
-     * Return a boolean indicating whether the content type
-     * is a wildcard type (i.e. '*' or '*\/*').
+     * Expose the parameters object to the calling class or method.
      *
-     * This method will return false on a wildcard subtype.
-     * Use the `isWildCardSubtype()` method instead.
+     * @return \Sufet\Entities\ParameterGroup
+     */
+    public function params()
+    {
+        return $this->parameters;
+    }
+
+    /**
+     * Return a boolean indicating whether the content type is a wildcard type
+     * (i.e. '*' or '*\/*').
+     *
+     * This method will return false on a wildcard subtype. Use the
+     * `isWildCardSubtype()` method instead.
      *
      * @return bool
      */
@@ -115,11 +126,11 @@ class ContentType
     }
 
     /**
-     * Return a boolean indicating whether the content type
-     * is a wildcard subtype (e.g. *\/* or text\/*).
+     * Return a boolean indicating whether the content type is a wildcard
+     * subtype (e.g. *\/* or text\/*).
      *
-     * If the content type does not have a subtype, this method
-     * will always return false.
+     * If the content type does not have a subtype, this method will always
+     * return false.
      *
      * @return bool
      */
@@ -129,9 +140,8 @@ class ContentType
     }
 
     /**
-     * Returns the q-value of the content type as specified by the
-     * parameters object. If no qvalue is specified, this method
-     * should return '1.0'
+     * Returns the q-value of the content type as specified by the parameters
+     * object. If no qvalue is specified, this method should return '1.0'
      *
      * @return float
      */
