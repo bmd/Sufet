@@ -42,7 +42,7 @@ class ParameterGroup extends AccessibleEntity
         $holder = [];
         foreach ($params as $param) {
             $components = preg_split('/=/', $param);
-            $holder[trim($components[0])] = trim($components[1]);
+            $holder[strtolower(trim($components[0]))] = strtolower(trim($components[1]));
         }
 
         return $holder;

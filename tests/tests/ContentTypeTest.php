@@ -24,8 +24,8 @@ class ContentTypeTest extends PHPUnit_Framework_TestCase
     {
         $content = $this->getContentType('application/json');
         $this->assertFalse($content->isWildCardType());
-        $this->assertEquals('application', $content->baseType);
-        $this->assertEquals('json', $content->subType);
+        $this->assertEquals('application', $content->getBaseType());
+        $this->assertEquals('json', $content->getSubType());
     }
 
     public function testNonSubtypeContentType()
@@ -40,7 +40,7 @@ class ContentTypeTest extends PHPUnit_Framework_TestCase
 
     public function testSubtypeContentType()
     {
-        $content = $this->getContentType('accept/json;q=0.7;foo=bar');
+        $content = $this->getContentType('application/json;q=0.7;foo=bar');
         $this->assertInstanceOf("\\Sufet\\Entities\\ContentType", $content);
         $this->assertEquals('0.7', $content->q());
         $this->assertEquals('bar', $content->params()->foo);
@@ -51,6 +51,24 @@ class ContentTypeTest extends PHPUnit_Framework_TestCase
 
     public function testWildCardType()
     {
+        $content = $this->getContentType('*/*;foo=bar');
+        $this->assertInstanceOf("\\Sufet\\Entities\\ContentType", $content);
+        $this->assertEquals('1.0', $content->q());
+        $this->assertEquals('bar', $content->params()->foo);
+        $this->assertEquals('*', $content->getSubType());
+        $this->assertEquals('*', $content->getBaseType());
+        $this->assertTrue($content->isWildCardType());
+    }
 
+    public function testWildCardSubType()
+    {
+        $content = $this->getContentType('text/*;FOO=bar');
+        $this->assertInstanceOf("\\Sufet\\Entities\\ContentType", $content);
+        $this->assertEquals('1.0', $content->q());
+        $this->assertEquals('bar', $content->params()->foo);
+        $this->assertEquals('*', $content->getSubType());
+        $this->assertEquals('text', $content->getBaseType());
+        $this->assertFalse($content->isWildCardType());
+        $this->assertTrue($content->isWildCardSubtype());
     }
 }

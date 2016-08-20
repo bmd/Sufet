@@ -20,11 +20,11 @@ class EncodingNegotiatorTest extends PHPUnit_Framework_TestCase
     public function testWildCardEncodingHeader()
     {
         $negotiator = $this->getNegotiator('*');
-
-        $this->assertTrue($negotiator->willAccept('*'));
-        $this->assertFalse($negotiator->willAccept('gzip'));
-
         $this->assertTrue($negotiator->best()->isWildCardType());
+
+        foreach (['gzip', 'identity', 'br'] as $type) {
+            $this->assertTrue($negotiator->willAccept($type));
+        }
     }
 
     public function testWildCardEncodingHeaderWithParameters()

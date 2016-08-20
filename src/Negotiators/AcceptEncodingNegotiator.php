@@ -61,7 +61,7 @@ class AcceptEncodingNegotiator extends AbstractNegotiator
      * same q-value.
      *
      * @link https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.3
-     * 
+     *
      * @param  ContentType $a
      * @param  ContentType $b
      * @return int
@@ -167,7 +167,7 @@ class AcceptEncodingNegotiator extends AbstractNegotiator
      */
     public function willAccept($type)
     {
-        if (isset($this->contentTypes[$type]) && $this->contentTypes[$type]->baseType === $type) {
+        if (isset($this->contentTypes[$type]) && $this->contentTypes[$type]->getBaseType() === $type) {
             return true;
         }
 

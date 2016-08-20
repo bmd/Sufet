@@ -25,40 +25,52 @@ class AcceptCharsetNegotiator extends AbstractNegotiator
     public $headerName = 'accept-charset';
 
     /**
+     * Order charsets according to the preference. The sorting criteria
+     * for charsets are simple compared to other media types. Only the
+     * qvalue and wildcard criteria are used.
+     *
+     * @link https://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec14.2
+     *
      * @param  \Sufet\Entities\ContentType $a
      * @param  \Sufet\Entities\ContentType $b
      * @return int
      */
     protected function sortTypes(ContentType $a, ContentType $b)
     {
-        // TODO: Implement sortTypes() method.
+        if ($a->q() > $b->q()) {
+            return 1;
+        }
+
+        if ($b->q() > $a->q()) {
+            return -1;
+        }
+
+        if ($a->isWildCardType()) {
+            return -1;
+        }
+
+        if ($b->isWildCardType()) {
+            return 1;
+        }
+
+        return 0;
     }
 
     /**
-     * AcceptCharsetNegotiator constructor.
+     * Return true if the specified charset is the charset that the
+     * client consideres the best.
      *
-     * @param string $rawHeader
-     */
-    public function __construct($rawHeader)
-    {
-        $this->contentTypes = new ContentTypeCollection($rawHeader);
-    }
-
-    /**
-     * @inheritdoc
+     * @param  string $type
+     * @return bool
      */
     public function wants($type)
     {
-        foreach ($this->contentTypes->getBestType() as $candidate) {
-            if ($candidate->baseName === $type) {
-                return true;
-            }
-        }
-
-        return false;
+        return $this->best()->getBaseType() === $type;
     }
 
     /**
+     *
+     *
      * @param  string $type
      * @param  string $to
      * @return bool
@@ -76,11 +88,6 @@ class AcceptCharsetNegotiator extends AbstractNegotiator
     public function willAccept($type)
     {
         $c = new ContentType($type);
-    }
-
-    public function best()
-    {
-        // TODO: Implement best() method.
     }
 
     protected function parseHeader($headerContent)

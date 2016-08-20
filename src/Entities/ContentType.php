@@ -16,8 +16,12 @@ namespace Sufet\Entities;
  * Class ContentType
  * @package Sufet\Entities
  */
-class ContentType extends AccessibleEntity
+class ContentType
 {
+    protected $baseType;
+
+    protected $subType;
+
     /**
      * The parameter group object attached to any content type
      * object.
@@ -48,16 +52,16 @@ class ContentType extends AccessibleEntity
         // handle media types that have a subtype parameter or not
         if (strpos($this->contentType, '/') !== false) {
             $y = preg_split(',/,', $this->contentType);
-            $this->data['baseType'] = $y[0];
-            $this->data['subType'] = $y[1];
+            $this->baseType = $y[0];
+            $this->subType = $y[1];
         } else {
-            $this->data['baseType'] = $this->contentType;
-            $this->data['subType'] = null;
+            $this->baseType = $this->contentType;
+            $this->subType = null;
         }
     }
 
     /**
-     * Get the parameters object.
+     * Expose the parameters object to the calling class or method.
      *
      * @return \Sufet\Entities\ParameterGroup
      */
@@ -67,10 +71,11 @@ class ContentType extends AccessibleEntity
     }
 
     /**
-     * Get the base content type. For types with subtypes, such as
-     * 'application/json', this will return the first segment,
-     * 'application'. For content types without subtypes, e.g.
-     * charset, this will return the entire media type.
+     * Get the base content type.
+     *
+     * For types with subtypes, such as 'application/json', this will
+     * return the first segment, 'application'. For content types without
+     * subtypes, e.g. charset, this will return the entire type.
      *
      * @param  mixed $default (optional)
      * @return string
@@ -78,13 +83,16 @@ class ContentType extends AccessibleEntity
     public function getBaseType($default = null)
     {
         return isset($this->baseType) ? $this->baseType : $default;
-
     }
 
     /**
+     * Get the content subtype, when available, or fall back to
+     * a default value.
      *
+     * For content types that don't allow a subtype, the value of
+     * $default will be returned.
      *
-     * @param  string $default
+     * @param  mixed $default
      * @return string
      */
     public function getSubType($default = null)
@@ -108,7 +116,10 @@ class ContentType extends AccessibleEntity
 
     /**
      * Return a boolean indicating whether the content type
-     * is a wildcard su
+     * is a wildcard subtype (e.g. *\/* or text\/*).
+     *
+     * If the content type does not have a subtype, this method
+     * will always return false.
      *
      * @return bool
      */
@@ -118,7 +129,9 @@ class ContentType extends AccessibleEntity
     }
 
     /**
-     * Returns the q-value of
+     * Returns the q-value of the content type as specified by the
+     * parameters object. If no qvalue is specified, this method
+     * should return '1.0'
      *
      * @return float
      */
@@ -126,5 +139,4 @@ class ContentType extends AccessibleEntity
     {
         return $this->parameters->q();
     }
-
 }

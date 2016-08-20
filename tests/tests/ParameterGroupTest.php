@@ -7,34 +7,101 @@ use Sufet\Entities\ParameterGroup;
  */
 class ParameterGroupTest extends PHPUnit_Framework_TestCase
 {
+    /**
+     * @param  array $params
+     * @return \Sufet\Entities\ParameterGroup
+     */
+    protected function getParameterGroup(array $params)
+    {
+        return new ParameterGroup($params);
+    }
+
+    /**
+     * @group Parameters
+     */
     public function testParameterGroupConsumesString()
     {
-        $p = new ParameterGroup(['charset=UTF-8', 'foo=bar', 'baz=qux']);
-        $this->assertInstanceOf('Sufet\\Entities\\ParameterGroup', $p);
+        $this->assertInstanceOf('Sufet\\Entities\\ParameterGroup', $this->getParameterGroup(['charset=UTF-8', 'foo=bar', 'baz=qux']));
     }
 
+    /**
+     * @group Parameters
+     */
     public function testParameterGroupContainsExpectedParameters()
     {
-        $p = new ParameterGroup(['charset=UTF-8', 'foo=bar', 'baz=qux']);
+        $p = $this->getParameterGroup(['charset=UTF-8', 'foo=bar', 'baz=qux']);
         $this->assertEquals('bar', $p->foo);
         $this->assertEquals('qux', $p->baz);
-        $this->assertEquals('UTF-8', $p->charset);
+        $this->assertEquals('utf-8', $p->charset);
     }
 
-    public function testAllParametersCanBeReturned()
+    /**
+     * @group Parameters
+     */
+    public function testParameterHandlingIsCaseInsensitive()
     {
-        $p = new ParameterGroup(['charset=UTF-8', 'foo=bar', 'baz=qux']);
+        $p = $this->getParameterGroup(['CHARSET=UTF-8', 'FOO=bar', 'BAZ=qux']);
+        $this->assertEquals('bar', $p->foo);
+        $this->assertEquals('qux', $p->baz);
+        $this->assertEquals('utf-8', $p->charset);
+    }
+
+    /**
+     * @group Parameters
+     */
+    public function testAllParametersCanBeReturnedByMagicMethods()
+    {
+        $p = $this->getParameterGroup(['charset=UTF-8', 'foo=bar', 'baz=qux']);
         $this->assertArrayHasKey('foo', $p->all());
         $this->assertArrayHasKey('charset', $p->all());
+        $this->assertArrayHasKey('baz', $p->all());
     }
 
-    public function testInvalidParameterAccessRaisesException()
+    /**
+     * @group Parameters
+     */
+    public function testAllParametersCanBeReturnedByArrayAccess()
     {
-
+        $p = $this->getParameterGroup(['charset=UTF-8', 'foo=bar', 'baz=qux']);
+        $this->assertEquals('bar', $p['foo']);
+        $this->assertEquals('utf-8', $p['charset']);
+        $this->assertEquals('qux', $p['baz']);
     }
 
+    /**
+     * @group Parameters
+     */
+    public function testQValueIsAccurate()
+    {
+        $p = $this->getParameterGroup(['charset=UTF-8', 'foo=bar', 'q=0.3']);
+        $this->assertEquals(0.3, $p->q());
+    }
+
+    /**
+     * @group Parameters
+     */
+    public function testQValueAlwaysAvailable()
+    {
+        $p = $this->getParameterGroup(['charset=UTF-8', 'foo=bar', 'baz=qux']);
+        $this->assertEquals(1.0, $p->q());
+    }
+
+    /**
+     * @group Parameters
+     */
     public function testDefaultFallbackWorks()
     {
+        $p = $this->getParameterGroup(['charset=UTF-8', 'foo=bar', 'baz=qux']);
+        $this->assertNull($p->param('x'));
+        $this->assertEquals('fallback', $p->param('x', $default='fallback'));
+    }
 
+    /**
+     * @group Parameters
+     */
+    public function testValuesWithNonVariableCharacters()
+    {
+        $p = $this->getParameterGroup(['charset=UTF-8', 'foo-bar=bar', 'baz=qux']);
+        $this->assertEquals('bar', $p['foo-bar']);
     }
 }
