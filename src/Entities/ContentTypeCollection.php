@@ -36,6 +36,17 @@ class ContentTypeCollection implements \ArrayAccess
     }
 
     /**
+     * Return the names of all content types that are considered
+     * acceptable by the client.
+     *
+     * @return array
+     */
+    public function all()
+    {
+        return array_values($this->types);
+    }
+
+    /**
      * @param  mixed $offset
      * @return bool
      */
@@ -72,10 +83,4 @@ class ContentTypeCollection implements \ArrayAccess
     {
         unset($this->types[$offset]);
     }
-
-    public function all()
-    {
-        return array_values($this->types);
-    }
-
 }

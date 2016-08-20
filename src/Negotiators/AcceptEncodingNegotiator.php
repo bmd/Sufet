@@ -120,7 +120,7 @@ class AcceptEncodingNegotiator extends AbstractNegotiator
      */
     public function wants($type)
     {
-        return $this->contentTypes->best()->baseType === $candidate;
+        return $this->best()->getBaseType() === $type;
     }
 
     /**
