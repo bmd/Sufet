@@ -4,7 +4,7 @@
  *
  * @category   Sufet
  * @package    Negotiators
- * @author     Brendan Maione-Downing <author@example.com>
+ * @author     Brendan Maione-Downing <b.maionedowning@gmail.com>
  * @copyright  2016
  * @license    MIT
  * @link       https://github.com/bmd/Sufet
@@ -21,6 +21,14 @@ use Sufet\Entities\ContentTypeCollection;
  */
 class AcceptCharsetNegotiator extends AbstractNegotiator
 {
+    /** @var string */
+    public $headerName = 'accept-charset';
+
+    /**
+     * @param  \Sufet\Entities\ContentType $a
+     * @param  \Sufet\Entities\ContentType $b
+     * @return int
+     */
     protected function sortTypes(ContentType $a, ContentType $b)
     {
         // TODO: Implement sortTypes() method.

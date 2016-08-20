@@ -4,7 +4,7 @@
  *
  * @category   Sufet
  * @package    Negotiators
- * @author     Brendan Maione-Downing <author@example.com>
+ * @author     Brendan Maione-Downing <b.maionedowning@gmail.com>
  * @copyright  2016
  * @license    MIT
  * @link       https://github.com/bmd/Sufet
@@ -21,7 +21,7 @@ use Sufet\Entities\ContentTypeCollection;
  */
 class AcceptEncodingNegotiator extends AbstractNegotiator
 {
-    /** @var string */
+    /** @inheritdoc */
     public $headerName = 'accept-encoding';
 
     /**
@@ -42,27 +42,53 @@ class AcceptEncodingNegotiator extends AbstractNegotiator
      * @link https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.3
      *
      * @param  mixed $encodings
-     * @return void
+     * @return ContentTypeCollection
      */
     protected function parseHeader($encodings)
     {
-        $encodings = $encodings ?: '*';
-
-        $this->contentTypes = new ContentTypeCollection($encodings);
-        foreach (preg_split('/,/', $encodings) as $encoding) {
-            $this->contentTypes[] = new ContentType($encoding);
-        }
+        return new ContentTypeCollection($encodings ?: '*');
     }
 
     /**
-     * Check the sorting array of
+     * Method for sorting encodings available to the client based on preference
+     * and specificity.
      *
+     * For encodings, in addition to the standard behavior of sorting content
+     * types using the `q` value for preference and wildcard for precedence,
+     * the type "identity" also plays a special role. "identity" will be
+     * considered more preferrable than a wildcard with an equivalent q-value,
+     * but less preferrable than any other non-wildcard encoding with the
+     * same q-value.
+     *
+     * @link https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.3
+     * 
      * @param  ContentType $a
      * @param  ContentType $b
      * @return int
      */
     protected function sortTypes(ContentType $a, ContentType $b)
     {
+        if ($a->q() > $b->q()) {
+            return 1;
+        }
+
+        if ($b->q() > $a->q()) {
+            return -1;
+        }
+
+        if ($a->isWildCardType()) {
+            return -1;
+        }
+
+        if ($b->isWildCardType()) {
+            return 1;
+        }
+
+        if ($a->getBaseType() == 'identity') {
+            return -1;
+        }
+
+        return 0;
 
     }
 
@@ -141,16 +167,15 @@ class AcceptEncodingNegotiator extends AbstractNegotiator
      */
     public function willAccept($type)
     {
-        if (in_array($type, $this->contentTypes->accepts())) {
+        if (isset($this->contentTypes[$type]) && $this->contentTypes[$type]->baseType === $type) {
             return true;
         }
 
-        if (isset($this->contentTypes['*']) && $this->contentTypes['*']->params()->q() != 0.0) {
+        if (isset($this->contentTypes['*']) && $this->contentTypes['*']->q() != '0.0') {
             return true;
         }
 
         return false;
     }
-
 
 }

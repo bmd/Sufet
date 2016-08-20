@@ -4,7 +4,7 @@
  *
  * @category   Sufet
  * @package    Entities
- * @author     Brendan Maione-Downing <author@example.com>
+ * @author     Brendan Maione-Downing <b.maionedowning@gmail.com>
  * @copyright  2016
  * @license    MIT
  * @link       https://github.com/bmd/Sufet
@@ -18,10 +18,17 @@ namespace Sufet\Entities;
  */
 abstract class AccessibleEntity implements \ArrayAccess
 {
-    /** @var array */
+    /**
+     * Data container for implementing magic get/set methods
+     * as well as the array access methods on Sufet objects.
+     *
+     * @var array
+     */
     protected $data = [];
 
     /**
+     * Magic get method for Sufet entities.
+     *
      * @param  string $name
      * @return mixed
      */
@@ -31,6 +38,8 @@ abstract class AccessibleEntity implements \ArrayAccess
     }
 
     /**
+     * Magic set method for Sufet entities.
+     *
      * @param  string $name
      * @param  mixed  $value
      * @return void
@@ -41,6 +50,8 @@ abstract class AccessibleEntity implements \ArrayAccess
     }
 
     /**
+     * Array offset method.
+     *
      * @param  mixed $offset
      * @return bool
      */
@@ -50,6 +61,8 @@ abstract class AccessibleEntity implements \ArrayAccess
     }
 
     /**
+     * Offset get method.
+     *
      * @param  mixed $offset
      * @return mixed
      */
@@ -59,8 +72,11 @@ abstract class AccessibleEntity implements \ArrayAccess
     }
 
     /**
-     * @param mixed $offset
-     * @param mixed $value
+     * Offset set method.
+     *
+     * @param  mixed $offset
+     * @param  mixed $value
+     * @return void
      */
     public function offsetSet($offset, $value)
     {
@@ -68,7 +84,10 @@ abstract class AccessibleEntity implements \ArrayAccess
     }
 
     /**
-     * @param mixed $offset
+     * Offset unset method.
+     *
+     * @param  mixed $offset
+     * @return void
      */
     public function offsetUnset($offset)
     {

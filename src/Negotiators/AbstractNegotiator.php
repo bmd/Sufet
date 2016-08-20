@@ -4,7 +4,7 @@
  *
  * @category   Sufet
  * @package    Negotiators
- * @author     Brendan Maione-Downing <author@example.com>
+ * @author     Brendan Maione-Downing <b.maionedowning@gmail.com>
  * @copyright  2016
  * @license    MIT
  * @link       https://github.com/bmd/Sufet
@@ -19,7 +19,7 @@ use Sufet\Entities\ContentTypeCollection;
  * Class AbstractNegotiator
  * @package Sufet\Negotiators
  */
-abstract class AbstractNegotiator
+abstract class AbstractNegotiator implements \ArrayAccess
 {
     /**
      * The collection of content types included in the header.
@@ -131,6 +131,41 @@ abstract class AbstractNegotiator
      */
     public function best()
     {
-        return usort($this->contentTypes->all(), [self::class, 'sortTypes']);
+        $sortArray = $this->contentTypes->all();
+        usort($sortArray, [self::class, 'sortTypes']);
+        return $sortArray[0];
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function offsetExists($offset)
+    {
+        return array_key_exists($offset, $this->contentTypes);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function offsetGet($offset)
+    {
+        return $this->contentTypes[$offset];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function offsetSet($offset, $value)
+    {
+        throw new \LogicException("Setting Content Types via array access syntax is not supported");
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function offsetUnset($offset)
+    {
+        throw new \LogicException("Unsetting Content Types via array access syntax is not supported");
+    }
+
 }

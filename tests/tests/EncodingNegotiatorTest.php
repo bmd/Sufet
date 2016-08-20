@@ -6,30 +6,41 @@
 class EncodingNegotiatorTest extends PHPUnit_Framework_TestCase
 {
 
+    protected function getNegotiator($str)
+    {
+        return \Sufet\Sufet::makeNegotiator('accept-encoding', $str);
+
+    }
+
     public function testCreatesEncodingNegotiator()
     {
-        $headerName = 'accept-encoding';
-        // simplest test case
-        $headerContent = '*';
+        $this->assertInstanceOf("\\Sufet\\Negotiators\\AcceptEncodingNegotiator", $this->getNegotiator('*'));
+    }
 
-        $negotiator = \Sufet\Sufet::makeNegotiator($headerName, $headerContent);
-        $this->assertInstanceOf("\\Sufet\\Negotiators\\AcceptEncodingNegotiator", $negotiator);
+    public function testWildCardEncodingHeader()
+    {
+        $negotiator = $this->getNegotiator('*');
+
+        $this->assertTrue($negotiator->willAccept('*'));
+        $this->assertFalse($negotiator->willAccept('gzip'));
+
+        $this->assertTrue($negotiator->best()->isWildCardType());
+    }
+
+    public function testWildCardEncodingHeaderWithParameters()
+    {
+        $negotiator = $this->getNegotiator('*;q=0.7;foo=bar');
+
+        $this->assertEquals('0.7', $negotiator->best()->params()->q);
+        $this->assertEquals('bar', $negotiator->best()->params()->foo);
     }
 
     public function testSimpleEncodingHeader()
     {
-        // test a basic wildard
-        $negotiator = \Sufet\Sufet::makeNegotiator('accept-encoding', '*');
-        $this->assertInstanceOf("\\Sufet\\Entities\\ContentType", $negotiator->best());
-        $this->assertEquals($negotiator->best()->type, '*');
-        $this->assertTrue($negotiator->willAccept('*'));
-        $this->assertFalse($negotiator->best()->isWildCardType());
-        // test a basic preference without a Q value
-        $simplePreference = 'gzip';
-        $simplePreferenceWithQ = 'gzip;q=0.8';
+
     }
 
-    public function testComplexEncodingHeader()
+    public function testSimpleEncodingHeaderWithParameters()
     {
 
     }

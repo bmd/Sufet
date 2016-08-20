@@ -4,7 +4,7 @@
  *
  * @category   Sufet
  * @package    Middleware
- * @author     Brendan Maione-Downing <author@example.com>
+ * @author     Brendan Maione-Downing <b.maionedowning@gmail.com>
  * @copyright  2016
  * @license    MIT
  * @link       https://github.com/bmd/Sufet

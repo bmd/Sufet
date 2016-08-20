@@ -4,7 +4,7 @@
  *
  * @category   Sufet
  * @package    Entities
- * @author     Brendan Maione-Downing <author@example.com>
+ * @author     Brendan Maione-Downing <b.maionedowning@gmail.com>
  * @copyright  2016
  * @license    MIT
  * @link       https://github.com/bmd/Sufet
@@ -30,7 +30,8 @@ class ContentTypeCollection implements \ArrayAccess
     public function __construct($rawString)
     {
         foreach (explode(',', $rawString) as $type) {
-            $this->types[] = new ContentType($type);
+            $t = new ContentType($type);
+            $this->types[$t->getBaseType()] = $t;
         }
     }
 

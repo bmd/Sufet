@@ -4,7 +4,7 @@
  *
  * @category   Sufet
  * @package    Middleware
- * @author     Brendan Maione-Downing <author@example.com>
+ * @author     Brendan Maione-Downing <b.maionedowning@gmail.com>
  * @copyright  2016
  * @license    MIT
  * @link       https://github.com/bmd/Sufet
@@ -39,10 +39,6 @@ class ParameterGroup extends AccessibleEntity
      */
     protected function parseParameters(array $params)
     {
-        if (!$params) {
-            return [];
-        }
-
         $holder = [];
         foreach ($params as $param) {
             $components = preg_split('/=/', $param);
@@ -66,11 +62,7 @@ class ParameterGroup extends AccessibleEntity
      */
     public function param($key, $default = null)
     {
-        if (array_key_exists($key, $this->data)) {
-            return $this->data[$key];
-        }
-
-        return $default;
+        return array_key_exists($key, $this->data) ? $this->data[$key] : $default;
     }
 
     /**
