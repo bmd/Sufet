@@ -132,8 +132,8 @@ abstract class AbstractNegotiator implements \ArrayAccess
     public function best()
     {
         $sortArray = $this->contentTypes->all();
-        usort($sortArray, [self::class, 'sortTypes']);
-        return $sortArray[0];
+        usort($sortArray, [$this, 'sortTypes']);
+        return array_reverse($sortArray)[0];
     }
 
     /**

@@ -135,7 +135,7 @@ class AcceptEncodingNegotiator extends AbstractNegotiator
     {
         // 1. $type will be accepted
         if (isset($this->contentTypes[$encoding]) and $this->contentTypes[$encoding]->q() > 0) {
-            if (!isset($this->contentTypes[$to]) || $this->contentTypes[$to]->q() < $this->contentTypes[$encoding]->q()) {
+            if (!isset($this->contentTypes[$to]) || ($this->contentTypes[$to]->q() < $this->contentTypes[$encoding]->q())) {
                 return true;
             } elseif ($this->contentTypes[$to]->q() >= $this->contentTypes[$encoding]->q()) {
                 return false;
@@ -143,6 +143,11 @@ class AcceptEncodingNegotiator extends AbstractNegotiator
         }
 
         // 2. $type will NOT be accepted
+        if (isset($this->contentTypes[$to]) && $this->contentTypes[$to]->q() > 0) {
+            return false;
+        }
+
+        return true;
     }
 
     /**

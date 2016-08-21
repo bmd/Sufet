@@ -42,8 +42,22 @@ class XCustomHeaderNegotiator extends AbstractNegotiator
 
 class_alias("\\My\\Domain\\XCustomHeaderNegotiator", "\\Sufet\\Negotiators\\XCustomHeaderNegotiator")
 
-\Sufet\Sufet::makeNegotiator('x-custom-header', 'abc123');
+$negotiator = \Sufet\Sufet::makeNegotiator('x-custom-header', 'abc123');
 
+```
+
+### Negotiating against a range of potential options
+
+```php
+function negotiateContent($headerName, $headerBody) {
+    $negotiator = \Sufet\Sufet::makeNegotiator('accept', 'text/*');
+
+    foreach (['application/json', 'text/html'] as $contentTypes) {
+        if ($negotiator->willAccept($contentType) {
+            return $contentType
+        }
+    }
+}
 ```
 
 ### Using Sufet with Laravel
