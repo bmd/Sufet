@@ -19,7 +19,7 @@ use Sufet\Entities\ContentTypeCollection;
  * Class AbstractNegotiator
  * @package Sufet\Negotiators
  */
-abstract class AbstractNegotiator implements \ArrayAccess
+abstract class AbstractNegotiator
 {
     /**
      * The collection of content types included in the header.
@@ -133,39 +133,19 @@ abstract class AbstractNegotiator implements \ArrayAccess
     {
         $sortArray = $this->contentTypes->all();
         usort($sortArray, [$this, 'sortTypes']);
+
         return array_reverse($sortArray)[0];
     }
 
     /**
-     * @inheritdoc
+     * @param string      $type
+     * @param string|null $subtype (optional)
+     * @param array       $parameters (optional)
+     * @param bool        $first (optional)
+     * @return array|null|\Sufet\Entities\ContentType
      */
-    public function offsetExists($offset)
+    public function getType($type, $subtype = null, $parameters = [], $first = true)
     {
-        return array_key_exists($offset, $this->contentTypes);
+        return $this->contentTypes->get($type, $subtype, $parameters, $first);
     }
-
-    /**
-     * @inheritdoc
-     */
-    public function offsetGet($offset)
-    {
-        return $this->contentTypes[$offset];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function offsetSet($offset, $value)
-    {
-        throw new \LogicException("Setting Content Types via array access syntax is not supported");
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function offsetUnset($offset)
-    {
-        throw new \LogicException("Unsetting Content Types via array access syntax is not supported");
-    }
-
 }

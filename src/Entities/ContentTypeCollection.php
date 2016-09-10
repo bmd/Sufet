@@ -16,7 +16,7 @@ namespace Sufet\Entities;
  * Class ContentTypeCollection
  * @package Sufet\Entities
  */
-class ContentTypeCollection implements \ArrayAccess
+class ContentTypeCollection
 {
 
     /**
@@ -25,7 +25,7 @@ class ContentTypeCollection implements \ArrayAccess
      *
      * @var array
      */
-    public $types = [];
+    protected $types = [];
 
     /**
      * ContentTypeCollection constructor.
@@ -36,7 +36,7 @@ class ContentTypeCollection implements \ArrayAccess
     {
         foreach (explode(',', $rawString) as $type) {
             $t = new ContentType($type);
-            $this->types[$t->getBaseType()] = $t;
+            $this->types[] = $t;
         }
     }
 
@@ -51,41 +51,26 @@ class ContentTypeCollection implements \ArrayAccess
         return array_values($this->types);
     }
 
-    /**
-     * @param  mixed $offset
-     * @return bool
-     */
-    public function offsetExists($offset)
+    public function get($type, $subtype = null, $parameters = [], $first = true)
     {
-        return array_key_exists($offset, $this->types);
-    }
+        $acceptableTypes = [];
+        /** @var ContentType $compType */
+        foreach ($this->types as $compType) {
+            if (!$type === $compType->getBaseType()) {
+                break;
+            }
 
-    /**
-     * @param  mixed $offset
-     * @return mixed
-     */
-    public function offsetGet($offset)
-    {
-        return $this->types[$offset];
-    }
+            if ($subtype && $subtype !== $compType->getSubType()) {
+                break;
+            }
 
-    /**
-     * @param mixed $offset
-     * @param mixed $value
-     */
-    public function offsetSet($offset, $value)
-    {
-        if (!$value instanceof ContentType) {
-            throw new \InvalidArgumentException("All entities must be an instance of \\Sufet\\Entities\\ContentType");
+            if ($first) {
+                return $compType;
+            } else {
+                $acceptableTypes[] = $compType;
+            }
         }
-        $this->types[$offset] = $value;
-    }
 
-    /**
-     * @param mixed $offset
-     */
-    public function offsetUnset($offset)
-    {
-        unset($this->types[$offset]);
+        return ($first) ? null : $acceptableTypes;
     }
 }

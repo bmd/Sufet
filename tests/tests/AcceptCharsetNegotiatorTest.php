@@ -41,7 +41,7 @@ class AcceptCharsetNegotiatorTest extends PHPUnit_Framework_TestCase
     public function testEmptyCharsetHeader()
     {
         $negotiator = $this->getNegotiator('');
-        $this->assertTrue(isset($negotiator['*']));
+        $this->assertTrue($negotiator->willAccept('*'));
         $this->assertTrue($negotiator->willAccept('ISO-8859-1'));
     }
 }

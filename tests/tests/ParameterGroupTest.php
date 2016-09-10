@@ -40,9 +40,9 @@ class ParameterGroupTest extends PHPUnit_Framework_TestCase
     public function testParameterGroupContainsExpectedParameters()
     {
         $p = $this->getParameterGroup(['charset=UTF-8', 'foo=bar', 'baz=qux']);
-        $this->assertEquals('bar', $p->foo);
-        $this->assertEquals('qux', $p->baz);
-        $this->assertEquals('utf-8', $p->charset);
+        $this->assertEquals('bar', $p->get('foo'));
+        $this->assertEquals('qux', $p->get('baz'));
+        $this->assertEquals('utf-8', $p->get('charset'));
     }
 
     /**
@@ -51,31 +51,9 @@ class ParameterGroupTest extends PHPUnit_Framework_TestCase
     public function testParameterHandlingIsCaseInsensitive()
     {
         $p = $this->getParameterGroup(['CHARSET=UTF-8', 'FOO=bar', 'BAZ=qux']);
-        $this->assertEquals('bar', $p->foo);
-        $this->assertEquals('qux', $p->baz);
-        $this->assertEquals('utf-8', $p->charset);
-    }
-
-    /**
-     * @group Parameters
-     */
-    public function testAllParametersCanBeReturnedByMagicMethods()
-    {
-        $p = $this->getParameterGroup(['charset=UTF-8', 'foo=bar', 'baz=qux']);
-        $this->assertArrayHasKey('foo', $p->all());
-        $this->assertArrayHasKey('charset', $p->all());
-        $this->assertArrayHasKey('baz', $p->all());
-    }
-
-    /**
-     * @group Parameters
-     */
-    public function testAllParametersCanBeReturnedByArrayAccess()
-    {
-        $p = $this->getParameterGroup(['charset=UTF-8', 'foo=bar', 'baz=qux']);
-        $this->assertEquals('bar', $p['foo']);
-        $this->assertEquals('utf-8', $p['charset']);
-        $this->assertEquals('qux', $p['baz']);
+        $this->assertEquals('bar', $p->get('foo'));
+        $this->assertEquals('qux', $p->get('baz'));
+        $this->assertEquals('utf-8', $p->get('charset'));
     }
 
     /**
@@ -102,8 +80,8 @@ class ParameterGroupTest extends PHPUnit_Framework_TestCase
     public function testDefaultFallbackWorks()
     {
         $p = $this->getParameterGroup(['charset=UTF-8', 'foo=bar', 'baz=qux']);
-        $this->assertNull($p->param('x'));
-        $this->assertEquals('fallback', $p->param('x', $default='fallback'));
+        $this->assertNull($p->get('x'));
+        $this->assertEquals('fallback', $p->get('x', $default='fallback'));
     }
 
     /**
@@ -112,6 +90,6 @@ class ParameterGroupTest extends PHPUnit_Framework_TestCase
     public function testValuesWithNonVariableCharacters()
     {
         $p = $this->getParameterGroup(['charset=UTF-8', 'foo-bar=bar', 'baz=qux']);
-        $this->assertEquals('bar', $p['foo-bar']);
+        $this->assertEquals('bar', $p->get('foo-bar'));
     }
 }

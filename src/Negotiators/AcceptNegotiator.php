@@ -36,7 +36,7 @@ class AcceptNegotiator extends AbstractNegotiator
 
     public function wants($type)
     {
-        return array_flip($this->mediaTypes)[0]->type === $type;
+        return $this->best()->getType() === $type;
     }
 
     public function prefers($type, $to)

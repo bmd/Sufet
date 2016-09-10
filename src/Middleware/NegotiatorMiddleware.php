@@ -70,8 +70,8 @@ class NegotiatorMiddleware
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, Callable $next)
     {
         $request = $request->withAttribute(
-            $this->attributeName,
-            Sufet::makeNegotiator($this->headerName, $request->getHeader($this->headerName))
+            $this->parameterName,
+            Sufet::makeNegotiator($this->headerName, join(';', $request->getHeader($this->headerName)))
         );
 
         return $next($request, $response);

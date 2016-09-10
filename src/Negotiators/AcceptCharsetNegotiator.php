@@ -113,10 +113,11 @@ class AcceptCharsetNegotiator extends AbstractNegotiator
     {
         $c = new ContentType($type);
         $t = new ContentType($to);
-        if (!isset($this->contentTypes[$type]) && !isset($this->contentTypes[$to])) {
+        if ($this->contentTypes->get($type) && $this->contentTypes->get($to)) {
             return false;
         }
-        return $this->contentTypes[$type]->q() >= $this->contentTypes[$type]->q();
+
+        return $this->contentTypes->get($type)->q() >= $this->contentTypes->get($type)->q();
     }
 
     /**
@@ -137,15 +138,15 @@ class AcceptCharsetNegotiator extends AbstractNegotiator
     {
         $c = new ContentType($charset);
 
-        if (isset($this->contentTypes[$c->getBaseType()]) && $this->contentTypes[$c->getBaseType()]->q() > 0.0) {
+        if ($this->contentTypes->get($c->getBaseType()) && $this->contentTypes->get($c->getBaseType())->q() > 0.0) {
             return true;
         }
 
-        if ($c->getBaseType() === 'ISO-8859-1' && (!isset($this->contentTypes['ISO-8859-1']) || $this->contentTypes['ISO-8859-1']->q() > 0.0)) {
+        if ($c->getBaseType() === 'ISO-8859-1' && (!$this->contentTypes->get('ISO-8859-1') || $this->contentTypes->get('ISO-8859-1')->q() > 0.0)) {
             return true;
         }
 
-        if (isset($this->contentTypes['*']) && $this->contentTypes['*']->q() > 0.0) {
+        if ($this->contentTypes->get('*') && $this->contentTypes->get('*')->q() > 0.0) {
             return true;
         }
 

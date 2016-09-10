@@ -101,6 +101,20 @@ class ContentType
         return isset($this->subType) ? $this->subType : $default;
     }
 
+    public function getType()
+    {
+        $base = $this->getBaseType();
+        $sub = $this->getSubType();
+
+        if ($base && $sub) {
+            return "{$base}/{$sub}";
+        } else if ($base) {
+            return "{$base}/*";
+        } else {
+            return "*/*";
+        }
+    }
+
     /**
      * Expose the parameters object to the calling class or method.
      *

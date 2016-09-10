@@ -11,6 +11,7 @@
  */
 
 namespace Sufet\Negotiators;
+
 use Sufet\Entities\ContentType;
 
 /**
@@ -30,7 +31,6 @@ class AcceptLanguageNegotiator extends AbstractNegotiator
     {
         // TODO: Implement parseHeader() method.
     }
-
 
     public function wants($type)
     {
@@ -56,6 +56,5 @@ class AcceptLanguageNegotiator extends AbstractNegotiator
     {
         // TODO: Implement sortTypes() method.
     }
-
 
 }

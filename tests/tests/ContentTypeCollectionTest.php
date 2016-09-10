@@ -23,14 +23,21 @@ class ContentTypeCollectionTest extends PHPUnit_Framework_TestCase
         return new ContentTypeCollection($raw);
     }
 
+    /**
+     * @group Content
+     */
     public function testInstantiatesContentTypeCollections()
     {
         $ct = $this->makeCollection("application/json,*/*;q=0.9");
         $this->assertInstanceOf("\\Sufet\\Entities\\ContentTypeCollection", $ct);
     }
 
+    /**
+     * @group Content
+     */
     public function testContentTypeCollectionContainsObjectTypes()
     {
         $ct = $this->makeCollection("application/json,*/*;q=0.9");
+        $this->assertInstanceOf("\\Sufet\\Entities\\ContentType", $ct->get('application', 'json'));
     }
 }

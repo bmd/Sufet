@@ -134,16 +134,16 @@ class AcceptEncodingNegotiator extends AbstractNegotiator
     public function prefers($encoding, $to)
     {
         // 1. $type will be accepted
-        if (isset($this->contentTypes[$encoding]) and $this->contentTypes[$encoding]->q() > 0) {
-            if (!isset($this->contentTypes[$to]) || ($this->contentTypes[$to]->q() < $this->contentTypes[$encoding]->q())) {
+        if ($this->contentTypes->get($encoding) and $this->contentTypes->get($encoding)->q() > 0) {
+            if (!$this->contentTypes->get($to) || ($this->contentTypes->get($to)->q() < $this->contentTypes->get($encoding)->q())) {
                 return true;
-            } elseif ($this->contentTypes[$to]->q() >= $this->contentTypes[$encoding]->q()) {
+            } elseif ($this->contentTypes->get($to)->q() >= $this->contentTypes->get($encoding)->q()) {
                 return false;
             }
         }
 
         // 2. $type will NOT be accepted
-        if (isset($this->contentTypes[$to]) && $this->contentTypes[$to]->q() > 0) {
+        if ($this->contentTypes->get($to) && $this->contentTypes->get($to)->q() > 0) {
             return false;
         }
 
@@ -172,11 +172,11 @@ class AcceptEncodingNegotiator extends AbstractNegotiator
      */
     public function willAccept($type)
     {
-        if (isset($this->contentTypes[$type]) && $this->contentTypes[$type]->getBaseType() === $type) {
+        if ($this->contentTypes->get($type) && $this->contentTypes->get($type)->getBaseType() === $type) {
             return true;
         }
 
-        if (isset($this->contentTypes['*']) && $this->contentTypes['*']->q() != '0.0') {
+        if ($this->contentTypes->get('*') && $this->contentTypes->get('*')->q() != '0.0') {
             return true;
         }
 
