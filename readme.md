@@ -1,3 +1,8 @@
+# Sufet
+
+[![Build Status](https://travis-ci.org/bmd/Sufet.svg?branch=master)](https://travis-ci.org/bmd/Sufet)
+[![Coverage Status](https://coveralls.io/repos/github/bmd/Sufet/badge.svg?branch=master)](https://coveralls.io/github/bmd/Sufet?branch=master)
+
 ### What is Sufet?
 Sufet is a generic, standalone library for implementing server-driven content negotiation that separates the domain logic of content negotiation from its behavioral components to create an extensible framework for negotiating HTTP responses and representations based on any header value, while still creating a semantic interface for doing the types of simpler content negotiation tasks that all web applications need to manage.
 
