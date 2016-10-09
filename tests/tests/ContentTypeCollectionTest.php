@@ -40,4 +40,19 @@ class ContentTypeCollectionTest extends PHPUnit_Framework_TestCase
         $ct = $this->makeCollection("application/json,*/*;q=0.9");
         $this->assertInstanceOf("\\Sufet\\Entities\\ContentType", $ct->get('application', 'json'));
     }
+
+    /**
+     * @group Content
+     */
+    public function testContentTypeGet()
+    {
+        $ct = $this->makeCollection("application/json,*/*;q=0.9");
+
+        $this->assertNull($ct->get('text'));
+        $this->assertEquals([], $ct->get('text', $first = false));
+
+        $this->assertInstanceOf("\\Sufet\\Entities\\ContentType", $ct->get('application', 'json'));
+        $this->assertInternalType('array', $ct->get('application', 'json', $first = false));
+    }
+
 }

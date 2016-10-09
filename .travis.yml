@@ -1,8 +1,19 @@
 language: php
+
 php:
   - '5.4'
   - '5.5'
   - '5.6'
   - '7.0'
-install: composer install
-script: phpunit
+
+install:
+  - composer install --dev
+
+before_script:
+  - mkdir -p build/logs
+
+script:
+  - phpunit --coverage-clover build/logs/clover.xml
+
+after_success:
+  - php vendor/bin/coveralls -v

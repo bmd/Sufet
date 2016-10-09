@@ -76,12 +76,11 @@ Then create a negotiator using the value of the header:
 
 ```php
 <?php
-
 namespace App\Http\Middleware;
 
 use Closure;
 
-class AgeMiddleware
+class ContentNegotiationMiddleware
 {
     /**
      * Register the negotiator on the request object.
@@ -92,11 +91,10 @@ class AgeMiddleware
      */
     public function handle($request, Closure $next)
     {
-        // if accept header is not provided, we can 
+        // if accept header is not provided, we can default to accept any type
         $acceptHeader = $request->header('accept', '*/*');
         
-        // ??? does this work? I doubt this works...
-        $request->negotiator = \Sufet\Sufet::makeNegotiator('accept', $acceptHeader);
+        $request['negotiator'] = \Sufet\Sufet::makeNegotiator('accept', $acceptHeader);
 
         return $next($request);
     }

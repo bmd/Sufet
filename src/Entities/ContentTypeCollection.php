@@ -51,12 +51,19 @@ class ContentTypeCollection
         return array_values($this->types);
     }
 
+    /**
+     * @param string      $type
+     * @param null|string $subtype (optional)
+     * @param array       $parameters (optional)
+     * @param bool        $first (optional)
+     * @return array|null|\Sufet\Entities\ContentType
+     */
     public function get($type, $subtype = null, $parameters = [], $first = true)
     {
         $acceptableTypes = [];
         /** @var ContentType $compType */
         foreach ($this->types as $compType) {
-            if (!$type === $compType->getBaseType()) {
+            if ($type !== $compType->getBaseType()) {
                 break;
             }
 
@@ -64,13 +71,16 @@ class ContentTypeCollection
                 break;
             }
 
+            // @TODO handle cases where we're filtering on parameters as well as types
+
             if ($first) {
                 return $compType;
             } else {
+                print_r("Appending to acceptable types");
                 $acceptableTypes[] = $compType;
             }
         }
 
-        return ($first) ? null : $acceptableTypes;
+        return $first ? null : $acceptableTypes;
     }
 }
