@@ -1,19 +1,9 @@
 <?php
-/**
- * Sufet is a content-negotiation library and PSR-7 compliant middleware.
- *
- * @category   Sufet
- * @package    Negotiators
- * @author     Brendan Maione-Downing <b.maionedowning@gmail.com>
- * @copyright  2016
- * @license    MIT
- * @link       https://github.com/bmd/Sufet
- */
 
 namespace Sufet\Negotiators;
 
 use Sufet\Entities\ContentType;
-use Sufet\Entities\ContentTypeCollection;
+use Sufet\Entities\NegotiableCollection;
 
 /**
  * Class AbstractNegotiator
@@ -26,7 +16,7 @@ abstract class AbstractNegotiator
      * The ContentTypeCollection object contains object
      * representations of each type included in the header.
      *
-     * @var ContentTypeCollection
+     * @var NegotiableCollection
      */
     protected $contentTypes;
 
@@ -58,7 +48,7 @@ abstract class AbstractNegotiator
      * object but hasn't yet been created.
      *
      * @param  string $headerContent
-     * @return ContentTypeCollection
+     * @return NegotiableCollection
      */
     abstract protected function parseHeader($headerContent);
 
@@ -138,10 +128,10 @@ abstract class AbstractNegotiator
     }
 
     /**
-     * @param string      $type
+     * @param string $type
      * @param string|null $subtype (optional)
-     * @param array       $parameters (optional)
-     * @param bool        $first (optional)
+     * @param array $parameters (optional)
+     * @param bool $first (optional)
      * @return array|null|\Sufet\Entities\ContentType
      */
     public function getType($type, $subtype = null, $parameters = [], $first = true)

@@ -50,7 +50,7 @@ class NegotiatorMiddleware
     /**
      * Construct the negotiator middleware.
      *
-     * @param  string      $headerName
+     * @param  string $headerName
      * @param  string|null $attributeName (optional)
      */
     public function __construct($headerName, $attributeName = null)
@@ -63,8 +63,8 @@ class NegotiatorMiddleware
      * Magic __invoke() method to drive middleware behavior.
      *
      * @param  \Psr\Http\Message\ServerRequestInterface $request
-     * @param  \Psr\Http\Message\ResponseInterface      $response
-     * @param  Callable                                 $next
+     * @param  \Psr\Http\Message\ResponseInterface $response
+     * @param  Callable $next
      * @return mixed
      */
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, Callable $next)

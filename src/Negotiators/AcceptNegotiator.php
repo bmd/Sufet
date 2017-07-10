@@ -1,18 +1,8 @@
 <?php
-/**
- * Sufet is a content-negotiation library and PSR-7 compliant middleware.
- *
- * @category   Sufet
- * @package    Negotiators
- * @author     Brendan Maione-Downing <b.maionedowning@gmail.com>
- * @copyright  2016
- * @license    MIT
- * @link       https://github.com/bmd/Sufet
- */
-
 namespace Sufet\Negotiators;
 
 use Sufet\Entities\ContentType;
+use Sufet\Entities\NegotiableCollection;
 
 /**
  * Class AcceptNegotiator
@@ -21,48 +11,73 @@ use Sufet\Entities\ContentType;
 class AcceptNegotiator extends AbstractNegotiator
 {
     /**
-     * AcceptNegotiator constructor.
+     * @param string $types
+     * @return NegotiableCollection
      */
-    public function __construct($mediaType)
+    protected function parseHeader($types)
     {
-
+        return new NegotiableCollection($types ?: '*');
     }
 
-    protected function parseHeader($headerContent)
-    {
-        // TODO: Implement parseHeader() method.
-    }
-
-
+    /**
+     * @param string $type
+     * @return bool
+     */
     public function wants($type)
     {
         return $this->best()->getType() === $type;
     }
 
+    /**
+     * @param string $type
+     * @param string $to
+     * @return bool
+     */
     public function prefers($type, $to)
     {
-        return $this->mediaTypes[$type]->q >= $this->mediaTypes[$type]->q;
+        return $this->contentTypes[$type]->q >= $this->contentTypes[$type]->q;
     }
 
+    /**
+     * @param string $type
+     * @return bool
+     */
     public function willAccept($type)
     {
         return true;
     }
 
-    public function hasType($type)
-    {
-
-    }
-
-    public function best()
-    {
-        return $this->mediaTypes[0];
-    }
-
+    /**
+     * @param ContentType $a
+     * @param ContentType $b
+     * @return int
+     */
     protected function sortTypes(ContentType $a, ContentType $b)
     {
-        // TODO: Implement sortTypes() method.
+        if ($a->q() > $b->q()) {
+            return 1;
+        }
+
+        if ($b->q() > $a->q()) {
+            return -1;
+        }
+
+        if ($a->isWildCardType()) {
+            return -1;
+        }
+
+        if ($b->isWildCardType()) {
+            return 1;
+        }
+
+        if ($a->isWildCardSubtype()) {
+            return -1;
+        }
+
+        if ($b->isWildCardSubtype()) {
+            return 1;
+        }
+
+        return 0;
     }
-
-
 }

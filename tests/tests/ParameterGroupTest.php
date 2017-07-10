@@ -1,16 +1,5 @@
 <?php
-/**
- * Sufet is a content-negotiation library and PSR-7 compliant middleware.
- *
- * @category   Sufet
- * @package    Tests
- * @author     Brendan Maione-Downing <b.maionedowning@gmail.com>
- * @copyright  2016
- * @license    MIT
- * @link       https://github.com/bmd/Sufet
- */
-
-use Sufet\Entities\ParameterGroup;
+use Sufet\Entities\Parameters;
 
 /**
  * Class ParameterGroupTest
@@ -18,78 +7,69 @@ use Sufet\Entities\ParameterGroup;
 class ParameterGroupTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @param  array $params
-     * @return \Sufet\Entities\ParameterGroup
+     * @test
      */
-    protected function getParameterGroup(array $params)
+    public function it_should_instantiate_parameter_object_from_string()
     {
-        return new ParameterGroup($params);
+        $this->assertInstanceOf(Parameters::class, new Parameters('charset=UTF-8;foo=bar;baz=qux'));
     }
 
     /**
-     * @group Parameters
+     * @test
      */
-    public function testParameterGroupConsumesString()
+    public function it_should_parse_expected_parameters()
     {
-        $this->assertInstanceOf('Sufet\\Entities\\ParameterGroup', $this->getParameterGroup(['charset=UTF-8', 'foo=bar', 'baz=qux']));
-    }
-
-    /**
-     * @group Parameters
-     */
-    public function testParameterGroupContainsExpectedParameters()
-    {
-        $p = $this->getParameterGroup(['charset=UTF-8', 'foo=bar', 'baz=qux']);
+        $p = new Parameters('charset=UTF-8;foo=bar;baz=qux');
         $this->assertEquals('bar', $p->get('foo'));
         $this->assertEquals('qux', $p->get('baz'));
         $this->assertEquals('utf-8', $p->get('charset'));
     }
 
     /**
-     * @group Parameters
+     * @test
      */
-    public function testParameterHandlingIsCaseInsensitive()
+    public function it_should_treat_parameters_as_case_insensitive()
     {
-        $p = $this->getParameterGroup(['CHARSET=UTF-8', 'FOO=bar', 'BAZ=qux']);
+        $p = new Parameters('CHARSET=UTF-8;FOO=bar;BAZ=qux');
         $this->assertEquals('bar', $p->get('foo'));
         $this->assertEquals('qux', $p->get('baz'));
         $this->assertEquals('utf-8', $p->get('charset'));
     }
 
     /**
-     * @group Parameters
+     * @test
      */
-    public function testQValueIsAccurate()
+    public function it_should_retrieve_correct_q_value()
     {
-        $p = $this->getParameterGroup(['charset=UTF-8', 'foo=bar', 'q=0.3']);
+        $p = new Parameters('charset=UTF-8;foo=bar;q=0.3');
         $this->assertEquals(0.3, $p->q());
     }
 
     /**
-     * @group Parameters
+     * @test
      */
-    public function testQValueAlwaysAvailable()
+    public function it_should_return_q_value_1_when_no_explicit_q_is_provided()
     {
-        $p = $this->getParameterGroup(['charset=UTF-8', 'foo=bar', 'baz=qux']);
+        $p = new Parameters('charset=UTF-8;foo=bar;baz=qux');
         $this->assertEquals(1.0, $p->q());
     }
 
     /**
-     * @group Parameters
+     * @test
      */
-    public function testDefaultFallbackWorks()
+    public function it_should_return_fallback_value_if_parameter_is_not_found()
     {
-        $p = $this->getParameterGroup(['charset=UTF-8', 'foo=bar', 'baz=qux']);
+        $p = new Parameters('charset=UTF-8;foo=bar;baz=qux');
         $this->assertNull($p->get('x'));
-        $this->assertEquals('fallback', $p->get('x', $default='fallback'));
+        $this->assertEquals('fallback', $p->get('x', $default = 'fallback'));
     }
 
     /**
-     * @group Parameters
+     * @test
      */
-    public function testValuesWithNonVariableCharacters()
+    public function it_should_allow_non_letter_values_in_parameter_names()
     {
-        $p = $this->getParameterGroup(['charset=UTF-8', 'foo-bar=bar', 'baz=qux']);
+        $p = new Parameters('charset=UTF-8;foo-bar=bar;baz=qux');
         $this->assertEquals('bar', $p->get('foo-bar'));
     }
 }

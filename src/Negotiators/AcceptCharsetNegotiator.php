@@ -13,7 +13,7 @@
 namespace Sufet\Negotiators;
 
 use Sufet\Entities\ContentType;
-use Sufet\Entities\ContentTypeCollection;
+use Sufet\Entities\NegotiableCollection;
 
 /**
  * Class AcceptCharsetNegotiator
@@ -38,11 +38,11 @@ class AcceptCharsetNegotiator extends AbstractNegotiator
      * @link https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.2
      *
      * @param  mixed $charsets
-     * @return ContentTypeCollection
+     * @return NegotiableCollection
      */
     protected function parseHeader($charsets)
     {
-        return new ContentTypeCollection($charsets ?: '*');
+        return new NegotiableCollection($charsets ?: '*');
     }
 
     /**
@@ -138,15 +138,15 @@ class AcceptCharsetNegotiator extends AbstractNegotiator
     {
         $c = new ContentType($charset);
 
-        if ($this->contentTypes->get($c->getBaseType()) && $this->contentTypes->get($c->getBaseType())->q() > 0.0) {
+        if ($this->contentTypes->find($c->getBaseType()) && $this->contentTypes->find($c->getBaseType())->q() > 0.0) {
             return true;
         }
 
-        if ($c->getBaseType() === 'ISO-8859-1' && (!$this->contentTypes->get('ISO-8859-1') || $this->contentTypes->get('ISO-8859-1')->q() > 0.0)) {
+        if ($c->getBaseType() === 'ISO-8859-1' && (!$this->contentTypes->find('ISO-8859-1') || $this->contentTypes->find('ISO-8859-1')->q() > 0.0)) {
             return true;
         }
 
-        if ($this->contentTypes->get('*') && $this->contentTypes->get('*')->q() > 0.0) {
+        if ($this->contentTypes->find('*') && $this->contentTypes->find('*')->q() > 0.0) {
             return true;
         }
 

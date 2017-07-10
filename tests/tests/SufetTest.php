@@ -1,14 +1,4 @@
 <?php
-/**
- * Sufet is a content-negotiation library and PSR-7 compliant middleware.
- *
- * @category   Sufet
- * @package    Tests
- * @author     Brendan Maione-Downing <b.maionedowning@gmail.com>
- * @copyright  2016
- * @license    MIT
- * @link       https://github.com/bmd/Sufet
- */
 
 use Sufet\Sufet;
 
@@ -18,27 +8,53 @@ use Sufet\Sufet;
  */
 class SufetTest extends PHPUnit_Framework_TestCase
 {
-
-    public function testSufetCreatesNegotiators()
+    /**
+     * @return array
+     */
+    public function expectedNegotiatorDataProvider()
     {
-        $mediaNegotiator = Sufet::makeNegotiator('accept', 'application/json');
-        $this->assertInstanceOf('Sufet\Negotiators\AcceptNegotiator', $mediaNegotiator);
-
-        $charsetNegotiator = Sufet::makeNegotiator('accept-charset', 'utf-8');
-        $this->assertInstanceOf('Sufet\Negotiators\AcceptCharsetNegotiator', $charsetNegotiator);
-
-        $encodingNegotiator = Sufet::makeNegotiator('accept-encoding', 'gzip');
-        $this->assertInstanceOf('Sufet\Negotiators\AcceptEncodingNegotiator', $encodingNegotiator);
-
-        $languageNegotiator = Sufet::makeNegotiator('accept-language', 'en-us');
-        $this->assertInstanceOf('Sufet\Negotiators\AcceptLanguageNegotiator', $languageNegotiator);
+        return [
+            ['accept', 'application/json', \Sufet\Negotiators\AcceptNegotiator::class],
+            ['accept-charset', 'utf-8', \Sufet\Negotiators\AcceptCharsetNegotiator::class],
+            ['accept-encoding', 'gzip', \Sufet\Negotiators\AcceptEncodingNegotiator::class],
+            ['accept-language', 'en-us', \Sufet\Negotiators\AcceptLanguageNegotiator::class],
+        ];
     }
 
-    public function testInvalidHeaderRaisesException()
+    /**
+     * @return array
+     */
+    public function badHeaderDataProvider()
     {
-        $badHeader = 'accept-potato';
-        $this->setExpectedException('DomainException', "Can't negotiate based on header '$badHeader'");
+        return [
+            ['accept-potato'],
+            ['Location'],
+        ];
+    }
 
+    /**
+     * @test
+     * @dataProvider expectedNegotiatorDataProvider
+     *
+     * @param $headerName
+     * @param $headerValue
+     * @param $expectedClass
+     */
+    public function it_should_instantiate_negotiators_based_on_header_names($headerName, $headerValue, $expectedClass)
+    {
+        $mediaNegotiator = Sufet::makeNegotiator($headerName, $headerValue);
+        $this->assertInstanceOf($expectedClass, $mediaNegotiator);
+    }
+
+    /**
+     * @test
+     * @dataProvider badHeaderDataProvider
+     * @expectedException DomainException
+     *
+     * @param $badHeader
+     */
+    public function it_should_throw_execption_when_header_name_is_not_mapped_to_negotiator($badHeader)
+    {
         Sufet::makeNegotiator($badHeader, 'potato');
     }
 }

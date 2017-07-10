@@ -1,6 +1,6 @@
 {
   "name": "bmd/sufet",
-  "description": "It's a content negotiation library",
+  "description": "A content negotiation framework for PHP 7",
   "license": "MIT",
   "authors": [
     {
@@ -9,6 +9,7 @@
     }
   ],
   "require": {
+    "php": ">=7.0",
     "psr/http-message": "1.*",
     "symfony/http-foundation": "*"
   },

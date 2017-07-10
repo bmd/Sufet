@@ -78,9 +78,9 @@ class ContentTypeTest extends PHPUnit_Framework_TestCase
     public function testWildCardType()
     {
         $content = $this->getContentType('*/*;foo=bar');
-        $this->assertInstanceOf("\\Sufet\\Entities\\ContentType", $content);
+        $this->assertInstanceOf(ContentType::class, $content);
         $this->assertEquals('1.0', $content->q());
-        $this->assertEquals('bar', $content->params()->get('foo'));
+        $this->assertEquals('bar', $content->param('foo'));
         $this->assertEquals('*', $content->getSubType());
         $this->assertEquals('*', $content->getBaseType());
         $this->assertTrue($content->isWildCardType());

@@ -1,21 +1,10 @@
 <?php
-/**
- * Sufet is a content-negotiation library and PSR-7 compliant middleware.
- *
- * @category   Sufet
- * @package    Middleware
- * @author     Brendan Maione-Downing <b.maionedowning@gmail.com>
- * @copyright  2016
- * @license    MIT
- * @link       https://github.com/bmd/Sufet
- */
-
 namespace Sufet\Entities;
 
 use Symfony\Component\HttpFoundation\ParameterBag;
 
 /**
- * Class ParameterGroup
+ * Class Parameters
  *
  * Implements a wrapper over Symfony's ParameterBag object to ensure
  * that header parameters are parsed correctly, and provide a special
@@ -23,9 +12,8 @@ use Symfony\Component\HttpFoundation\ParameterBag;
  *
  * @package Sufet\Entities
  */
-class ParameterGroup extends ParameterBag
+class Parameters extends ParameterBag
 {
-
     /**
      * Parameters constructor.
      *
@@ -36,33 +24,43 @@ class ParameterGroup extends ParameterBag
      */
     public function __construct($paramString)
     {
-        $this->parameters = $this->parseParameters($paramString);
+        parent::__construct($this->parseParameters($this->normalize($paramString)));
+    }
+
+    protected function normalize($paramString)
+    {
+        return strtolower($paramString);
     }
 
     /**
      * Decompose a string of header parameters into an array, and assign those
      * into an array to be accessed from the ParameterGroup object.
      *
-     * @param  array $params
+     * @param  string $params
      * @return array
      */
-    protected function parseParameters(array $params)
+    protected function parseParameters(string $params): array
     {
         $holder = [];
-        foreach ($params as $param) {
-            $components = preg_split('/=/', $param);
-            $holder[strtolower(trim($components[0]))] = strtolower(trim($components[1]));
+
+        // handle the case where the query string is empty, or malformed
+        if (!$params) {
+            return $holder;
+        }
+
+        foreach (explode(';', $params) as $param) {
+            // make sure each parameter appears well-formed
+            if (strpos($param, '=') !== false) {
+                [$name, $value] = explode('=', $param, $limit = 2);
+                $holder[$name] = $value;
+            }
         }
 
         return $holder;
     }
 
     /**
-     * Return the value of the quality parameter, or 1.0 if none is present.
-     * This helper method is exposed because of the special status that 'q'
-     * has among header parameters.
-     *
-     * @return float
+     * @inheritdoc
      */
     public function q()
     {

@@ -1,46 +1,37 @@
 <?php
-/**
- * Sufet is a content-negotiation library and PSR-7 compliant middleware.
- *
- * @category   Sufet
- * @package    Tests
- * @author     Brendan Maione-Downing <b.maionedowning@gmail.com>
- * @copyright  2016
- * @license    MIT
- * @link       https://github.com/bmd/Sufet
- */
 
 use Sufet\Negotiators\AcceptCharsetNegotiator;
 
 class AcceptCharsetNegotiatorTest extends PHPUnit_Framework_TestCase
 {
-
-    protected function getNegotiator($charset)
+    /**
+     * @test
+     */
+    public function it_should_instantiate_a_charset_negotiator()
     {
-        return new AcceptCharsetNegotiator($charset);
+        $negotiator = new AcceptCharsetNegotiator('utf-8');
+        $this->assertInstanceOf(AcceptCharsetNegotiator::class, $negotiator);
     }
 
     /**
-     * @group Charset
+     * @test
      */
-    public function testNegotiatorIsInstantiated()
+    public function it_should_accept_anything_with_wildcard_header()
     {
-        $negotiator = $this->getNegotiator('utf-8');
-        $this->assertInstanceOf("\\Sufet\\Negotiators\\AcceptCharsetNegotiator", $negotiator);
-    }
-
-    public function testWildCardCharsetHeader()
-    {
-        $negotiator = $this->getNegotiator('*');
+        $negotiator = new AcceptCharsetNegotiator('*');
         $this->assertTrue($negotiator->best()->isWildCardType());
         $this->assertEquals('1.0', $negotiator->best()->q());
         $this->assertTrue($negotiator->willAccept('potato'));
         $this->assertTrue($negotiator->willAccept('ISO-8859-1'));
     }
 
-    public function testEmptyCharsetHeader()
+    /**
+     * @test
+     */
+    public function it_should_correctly_handle_empty_header()
     {
-        $negotiator = $this->getNegotiator('');
+        $negotiator = new AcceptCharsetNegotiator('');
+
         $this->assertTrue($negotiator->willAccept('*'));
         $this->assertTrue($negotiator->willAccept('ISO-8859-1'));
     }

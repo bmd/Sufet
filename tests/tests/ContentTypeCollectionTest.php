@@ -10,49 +10,60 @@
  * @link       https://github.com/bmd/Sufet
  */
 
-use Sufet\Entities\ContentTypeCollection;
+use Sufet\Entities\ContentType;
+use Sufet\Entities\NegotiableCollection;
 
 /**
  * Class ContentTypeCollectionTest
  */
 class ContentTypeCollectionTest extends PHPUnit_Framework_TestCase
 {
-
-    protected function makeCollection($raw)
+    public function validHeaderProvider()
     {
-        return new ContentTypeCollection($raw);
+        return [
+            ['text/html,text/*;q=0.9'],
+            ['application/json;version=1;q=0.75, application/json;version=2'],
+            ['text'],
+        ];
     }
 
     /**
-     * @group Content
+     * @test
+     * @dataProvider validHeaderProvider
+     * @param string $h
      */
-    public function testInstantiatesContentTypeCollections()
+    public function it_should_create_collection_object_from_valid_headers(string $h)
     {
-        $ct = $this->makeCollection("application/json,*/*;q=0.9");
-        $this->assertInstanceOf("\\Sufet\\Entities\\ContentTypeCollection", $ct);
+        $collection = new NegotiableCollection($h);
+
+        $this->assertInstanceOf(NegotiableCollection::class, $collection);
     }
 
     /**
-     * @group Content
+     * @test
+     * @dataProvider validHeaderProvider
+     * @param string $h
      */
-    public function testContentTypeCollectionContainsObjectTypes()
+    public function it_should_contain_content_type_objects($h)
     {
-        $ct = $this->makeCollection("application/json,*/*;q=0.9");
-        $this->assertInstanceOf("\\Sufet\\Entities\\ContentType", $ct->get('application', 'json'));
+        $collection = new NegotiableCollection($h);
+
+        $this->assertNotEmpty($collection->all());
+        $this->assertContainsOnlyInstancesOf(ContentType::class, $collection->all());
     }
 
     /**
-     * @group Content
+     * @test
      */
-    public function testContentTypeGet()
+    public function it_should_search_for_content_types_by_name()
     {
-        $ct = $this->makeCollection("application/json,*/*;q=0.9");
+        $collection = new NegotiableCollection("application/json,*/*;q=0.9");
 
-        $this->assertNull($ct->get('text'));
-        $this->assertEquals([], $ct->get('text', $first = false));
+        $this->assertNull($collection->find('text'));
+        $this->assertEquals([], $collection->find('text', null, [], false));
 
-        $this->assertInstanceOf("\\Sufet\\Entities\\ContentType", $ct->get('application', 'json'));
-        $this->assertInternalType('array', $ct->get('application', 'json', $first = false));
+        $this->assertInstanceOf(ContentType::class, $collection->find('application', 'json'));
+        $this->assertNull($collection->find('text', 'html'));
+        $this->assertInternalType('array', $collection->find('application', 'json', [], $first = false));
     }
-
 }

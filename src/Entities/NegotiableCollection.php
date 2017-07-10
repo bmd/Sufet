@@ -16,14 +16,13 @@ namespace Sufet\Entities;
  * Class ContentTypeCollection
  * @package Sufet\Entities
  */
-class ContentTypeCollection
+class NegotiableCollection
 {
-
     /**
      * The collection of ContentType objects made available to the negotiator
      * class.
      *
-     * @var array
+     * @var ContentType[]
      */
     protected $types = [];
 
@@ -32,43 +31,41 @@ class ContentTypeCollection
      *
      * @param  string $rawString
      */
-    public function __construct($rawString)
+    public function __construct(string $rawString)
     {
-        foreach (explode(',', $rawString) as $type) {
-            $t = new ContentType($type);
-            $this->types[] = $t;
-        }
+        $this->types = array_map(function (string $t) {
+            return new ContentType($t);
+        }, explode(',', $rawString));
     }
 
     /**
-     * Return the names of all content types that are considered acceptable by
-     * the client.
-     *
-     * @return array
+     * @return ContentType[]
      */
     public function all()
     {
-        return array_values($this->types);
+        return $this->types;
     }
 
     /**
-     * @param string      $type
+     * @param string $type
      * @param null|string $subtype (optional)
-     * @param array       $parameters (optional)
-     * @param bool        $first (optional)
+     * @param array $parameters (optional)
+     * @param bool $first (optional)
      * @return array|null|\Sufet\Entities\ContentType
      */
-    public function get($type, $subtype = null, $parameters = [], $first = true)
+    public function find(string $type, ?string $subtype = null, array $parameters = [], bool $first = true)
     {
         $acceptableTypes = [];
+
         /** @var ContentType $compType */
         foreach ($this->types as $compType) {
+
             if ($type !== $compType->getBaseType()) {
-                break;
+                continue;
             }
 
             if ($subtype && $subtype !== $compType->getSubType()) {
-                break;
+                continue;
             }
 
             // @TODO handle cases where we're filtering on parameters as well as types
@@ -76,7 +73,6 @@ class ContentTypeCollection
             if ($first) {
                 return $compType;
             } else {
-                print_r("Appending to acceptable types");
                 $acceptableTypes[] = $compType;
             }
         }

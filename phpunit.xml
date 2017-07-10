@@ -21,10 +21,4 @@
             <directory suffix=".php">./src/</directory>
         </whitelist>
     </filter>
-
-    <logging>
-        <!-- Generates HTML coverage reports -->
-        <log type="coverage-html" target="./coverage/coverage.html" showUncoveredFiles="false"/>
-    </logging>
-
 </phpunit>

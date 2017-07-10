@@ -1,14 +1,4 @@
 <?php
-/**
- * Sufet is a content-negotiation library and PSR-7 compliant middleware.
- *
- * @category   Sufet
- * @package    Tests
- * @author     Brendan Maione-Downing <b.maionedowning@gmail.com>
- * @copyright  2016
- * @license    MIT
- * @link       https://github.com/bmd/Sufet
- */
 
 use Sufet\Middleware\NegotiatorMiddleware;
 use Zend\Diactoros\Response;
@@ -20,9 +10,9 @@ use Zend\Diactoros\ServerRequestFactory;
 class NegotiatorMiddlewareTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @group Middleware
+     * @test
      */
-    public function testConstructsCharsetMiddleware()
+    public function it_should_construct_charset_middleware()
     {
         /** @var \Zend\Diactoros\ServerRequest $request */
         $request = ServerRequestFactory::fromGlobals(['HTTP_ACCEPT_CHARSET' => 'utf-8']);
@@ -37,9 +27,9 @@ class NegotiatorMiddlewareTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @group Middleware
+     * @test
      */
-    public function testConstructsEncodingMiddleware()
+    public function it_should_construct_encoding_middleware()
     {
         /** @var \Zend\Diactoros\ServerRequest $request */
         $request = ServerRequestFactory::fromGlobals(['HTTP_ACCEPT_ENCODING' => 'gzip']);
@@ -54,9 +44,9 @@ class NegotiatorMiddlewareTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @group Middleware
+     * @test
      */
-    public function testConstructsLanguageMiddleware()
+    public function it_should_construct_language_middleware()
     {
         /** @var \Zend\Diactoros\ServerRequest $request */
         $request = ServerRequestFactory::fromGlobals(['HTTP_ACCEPT_LANGUAGE' => 'en-us,en-*;q=0.9']);
@@ -71,9 +61,9 @@ class NegotiatorMiddlewareTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @group Middleware
+     * @test
      */
-    public function testConstructsContentTypeMiddleware()
+    public function it_should_construct_content_type_middleware()
     {
         /** @var \Zend\Diactoros\ServerRequest $request */
         $request = ServerRequestFactory::fromGlobals(['HTTP_ACCEPT' => 'application/json']);

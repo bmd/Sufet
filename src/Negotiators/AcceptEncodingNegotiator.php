@@ -1,19 +1,8 @@
 <?php
-/**
- * Sufet is a content-negotiation library and PSR-7 compliant middleware.
- *
- * @category   Sufet
- * @package    Negotiators
- * @author     Brendan Maione-Downing <b.maionedowning@gmail.com>
- * @copyright  2016
- * @license    MIT
- * @link       https://github.com/bmd/Sufet
- */
-
 namespace Sufet\Negotiators;
 
 use Sufet\Entities\ContentType;
-use Sufet\Entities\ContentTypeCollection;
+use Sufet\Entities\NegotiableCollection;
 
 /**
  * Class AcceptEncodingNegotiator
@@ -42,11 +31,11 @@ class AcceptEncodingNegotiator extends AbstractNegotiator
      * @link https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.3
      *
      * @param  mixed $encodings
-     * @return ContentTypeCollection
+     * @return NegotiableCollection
      */
     protected function parseHeader($encodings)
     {
-        return new ContentTypeCollection($encodings ?: '*');
+        return new NegotiableCollection($encodings ?: '*');
     }
 
     /**
@@ -134,16 +123,16 @@ class AcceptEncodingNegotiator extends AbstractNegotiator
     public function prefers($encoding, $to)
     {
         // 1. $type will be accepted
-        if ($this->contentTypes->get($encoding) and $this->contentTypes->get($encoding)->q() > 0) {
-            if (!$this->contentTypes->get($to) || ($this->contentTypes->get($to)->q() < $this->contentTypes->get($encoding)->q())) {
+        if ($this->contentTypes->find($encoding) and $this->contentTypes->find($encoding)->q() > 0) {
+            if (!$this->contentTypes->find($to) || ($this->contentTypes->find($to)->q() < $this->contentTypes->find($encoding)->q())) {
                 return true;
-            } elseif ($this->contentTypes->get($to)->q() >= $this->contentTypes->get($encoding)->q()) {
+            } elseif ($this->contentTypes->find($to)->q() >= $this->contentTypes->find($encoding)->q()) {
                 return false;
             }
         }
 
         // 2. $type will NOT be accepted
-        if ($this->contentTypes->get($to) && $this->contentTypes->get($to)->q() > 0) {
+        if ($this->contentTypes->find($to) && $this->contentTypes->find($to)->q() > 0) {
             return false;
         }
 
@@ -172,15 +161,14 @@ class AcceptEncodingNegotiator extends AbstractNegotiator
      */
     public function willAccept($type)
     {
-        if ($this->contentTypes->get($type) && $this->contentTypes->get($type)->getBaseType() === $type) {
+        if ($this->contentTypes->find($type) && $this->contentTypes->find($type)->getBaseType() === $type) {
             return true;
         }
 
-        if ($this->contentTypes->get('*') && $this->contentTypes->get('*')->q() != '0.0') {
+        if ($this->contentTypes->find('*') && $this->contentTypes->find('*')->q() != '0.0') {
             return true;
         }
 
         return false;
     }
-
 }
